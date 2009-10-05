@@ -41,14 +41,14 @@ print_help() {
 }
 
 format_size() {
-	if [ "$1" -lt "1024" ]; then
-		echo "$1 KB"
-	else
-		newsize=$(echo "$1/1024" | bc)
-		echo "$newsize MB"
-	fi
+    if [ "$1" -lt "1024" ]; then
+	echo "$1 KB"
+    else
+	newsize=$(echo "$1/1024" | bc)
+	echo "$newsize MB"
+    fi
 
-	return 0
+    return 0
 }
 
 calc_size() {
@@ -59,11 +59,11 @@ calc_size() {
 
 memory_desc() {
     if [ "$1" = "rss" ]; then
-	echo "Resident Memory"
+        echo "Resident Memory"
     elif [ "$1" = "vsz" ]; then
-	echo "Virtual Memory"
+        echo "Virtual Memory"
     else
-	echo "Unknown"
+        echo "Unknown"
     fi
 
     return 0
@@ -105,11 +105,11 @@ while test -n "$1"; do
         --critical|-c)
             critical=$(calc_size $2)
             shift
-            ;;
-        --memory|-m)
+	    ;;
+	--memory|-m)
             memory=$2
             shift
-            ;;
+	    ;;
         --average|-a)
             average=1
             ;;
@@ -129,28 +129,28 @@ if [ $average -eq 1 ]; then
     size=$(format_size $avgsize)
 
     if [ "$avgsize" -ge "$critical" ]; then
-	data="CRITICAL: average process size reached $size $desc Size"
-	exitstatus=$STATE_CRITICAL
+        data="CRITICAL: average process size reached $size $desc Size"
+        exitstatus=$STATE_CRITICAL
     elif [ "$avgsize" -ge "$warning" ]; then
-	data="WARNING: average process size reached $size $desc Size"
-	exitstatus=$STATE_WARNING
+        data="WARNING: average process size reached $size $desc Size"
+        exitstatus=$STATE_WARNING
     elif [ "$avgsize" -lt "$critical" ]; then
-	data="OK: average process size has $size $desc Size"
-	exitstatus=$STATE_OK
+        data="OK: average process size has $size $desc Size"
+        exitstatus=$STATE_OK
     fi
 else
     maxsize=$(ps -C $processname -o rss k rss | tail -n 1)
     size=$(format_size $maxsize)
 
     if [ "$maxsize" -ge "$critical" ]; then
-	data="CRITICAL: a process reached $size $desc Size"
-	exitstatus=$STATE_CRITICAL
+        data="CRITICAL: a process reached $size $desc Size"
+        exitstatus=$STATE_CRITICAL
     elif [ "$maxsize" -ge "$warning" ]; then
-	data="WARNING: a process reached $size $desc Size"
-	exitstatus=$STATE_WARNING
+        data="WARNING: a process reached $size $desc Size"
+        exitstatus=$STATE_WARNING
     elif [ "$maxsize" -lt "$critical" ]; then
-	data="OK: Maximum process size has $size $desc Size"
-	exitstatus=$STATE_OK
+        data="OK: Maximum process size has $size $desc Size"
+        exitstatus=$STATE_OK
     fi
 fi
 
